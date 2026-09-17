@@ -20,8 +20,8 @@ export function sessionQueryOptions() {
   });
 }
 
-export function useSessionQuery() {
-  return useQuery(sessionQueryOptions());
+export function useSessionQuery(isEnabled = true) {
+  return useQuery({ ...sessionQueryOptions(), enabled: isEnabled });
 }
 
 export function useLoginMutation() {

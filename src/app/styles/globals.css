@@ -28,49 +28,49 @@
 }
 
 :root {
-  --background: oklch(0.985 0.004 255);
-  --foreground: oklch(0.19 0.025 260);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.19 0.025 260);
-  --muted: oklch(0.95 0.008 255);
-  --muted-foreground: oklch(0.48 0.025 260);
-  --primary: oklch(0.54 0.2 255);
-  --primary-foreground: oklch(0.99 0.005 255);
-  --secondary: oklch(0.925 0.02 255);
-  --secondary-foreground: oklch(0.26 0.05 255);
-  --border: oklch(0.89 0.015 255);
-  --input: oklch(0.89 0.015 255);
-  --ring: oklch(0.58 0.18 255);
-  --destructive: oklch(0.58 0.22 27);
-  --warning: oklch(0.72 0.16 75);
-  --success: oklch(0.58 0.15 155);
-  --code: oklch(0.94 0.012 255);
-  --code-foreground: oklch(0.28 0.04 255);
-  --radius: 0.625rem;
+  --background: oklch(0.975 0.008 255);
+  --foreground: oklch(0.235 0.028 258);
+  --card: oklch(0.995 0.003 255);
+  --card-foreground: oklch(0.235 0.028 258);
+  --muted: oklch(0.94 0.015 255);
+  --muted-foreground: oklch(0.49 0.025 258);
+  --primary: oklch(0.49 0.2 274);
+  --primary-foreground: oklch(0.99 0.004 255);
+  --secondary: oklch(0.91 0.035 245);
+  --secondary-foreground: oklch(0.28 0.06 268);
+  --border: oklch(0.865 0.02 252);
+  --input: oklch(0.83 0.026 252);
+  --ring: oklch(0.56 0.18 274);
+  --destructive: oklch(0.57 0.2 28);
+  --warning: oklch(0.72 0.15 85);
+  --success: oklch(0.56 0.13 150);
+  --code: oklch(0.93 0.02 255);
+  --code-foreground: oklch(0.28 0.035 258);
+  --radius: 0.85rem;
   color-scheme: light;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 }
 
 .dark {
-  --background: oklch(0.145 0.02 260);
-  --foreground: oklch(0.94 0.01 255);
-  --card: oklch(0.19 0.025 260);
-  --card-foreground: oklch(0.94 0.01 255);
-  --muted: oklch(0.235 0.025 260);
-  --muted-foreground: oklch(0.69 0.025 255);
-  --primary: oklch(0.7 0.16 250);
-  --primary-foreground: oklch(0.15 0.025 260);
-  --secondary: oklch(0.26 0.035 255);
-  --secondary-foreground: oklch(0.91 0.015 255);
-  --border: oklch(0.3 0.025 260);
-  --input: oklch(0.3 0.025 260);
-  --ring: oklch(0.68 0.16 250);
-  --destructive: oklch(0.68 0.19 25);
-  --warning: oklch(0.78 0.14 78);
-  --success: oklch(0.7 0.14 155);
-  --code: oklch(0.12 0.02 260);
-  --code-foreground: oklch(0.86 0.035 250);
+  --background: oklch(0.165 0.025 265);
+  --foreground: oklch(0.93 0.014 250);
+  --card: oklch(0.205 0.03 265);
+  --card-foreground: oklch(0.93 0.014 250);
+  --muted: oklch(0.26 0.033 265);
+  --muted-foreground: oklch(0.7 0.025 250);
+  --primary: oklch(0.7 0.16 278);
+  --primary-foreground: oklch(0.18 0.028 265);
+  --secondary: oklch(0.3 0.06 265);
+  --secondary-foreground: oklch(0.92 0.014 250);
+  --border: oklch(0.34 0.03 265);
+  --input: oklch(0.38 0.04 265);
+  --ring: oklch(0.74 0.14 278);
+  --destructive: oklch(0.71 0.18 27);
+  --warning: oklch(0.8 0.14 85);
+  --success: oklch(0.71 0.13 150);
+  --code: oklch(0.13 0.025 265);
+  --code-foreground: oklch(0.86 0.02 250);
   color-scheme: dark;
 }
 
@@ -90,16 +90,58 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family:
-    Inter,
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
+    "Avenir Next", Avenir, "Segoe UI", ui-sans-serif, system-ui, sans-serif;
   font-size: 1rem;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+.font-editorial {
+  font-family:
+    Iowan Old Style,
+    Baskerville,
+    "Times New Roman",
+    ui-serif,
+    Georgia,
+    serif;
+  font-weight: 500;
+  letter-spacing: -0.035em;
+}
+
+.page-glow {
+  background-image:
+    radial-gradient(
+      circle at 12% -10%,
+      color-mix(in oklab, var(--primary) 11%, transparent),
+      transparent 34rem
+    ),
+    radial-gradient(
+      circle at 92% 5%,
+      color-mix(in oklab, var(--primary) 7%, transparent),
+      transparent 28rem
+    );
+}
+
+.enter-rise {
+  animation: enter-rise 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.enter-rise-delayed {
+  animation: enter-rise 620ms 120ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes enter-rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.9rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 button,

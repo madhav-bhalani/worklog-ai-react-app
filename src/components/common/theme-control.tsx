@@ -19,7 +19,7 @@ export function ThemeControl() {
   return (
     <div
       aria-label="Color theme"
-      className="border-border bg-card inline-flex rounded-lg border p-1"
+      className="border-border/80 bg-card/75 inline-flex rounded-xl border p-1 shadow-sm"
       role="group"
     >
       {THEME_OPTIONS.map((option) => {
@@ -28,15 +28,16 @@ export function ThemeControl() {
 
         return (
           <Button
+            aria-label={`Use ${option.label.toLowerCase()} theme`}
             aria-pressed={isSelected}
-            className="h-8 gap-1.5 px-2.5 text-xs sm:text-sm"
+            className="size-8 rounded-lg p-0"
             key={option.preference}
             onClick={() => setPreference(option.preference)}
+            title={`${option.label} theme`}
             type="button"
             variant={isSelected ? "outline" : "ghost"}
           >
             <Icon aria-hidden="true" />
-            <span>{option.label}</span>
           </Button>
         );
       })}
