@@ -19,6 +19,17 @@ export const userSchema = z.object({
 
 export const authResponseSchema = z.object({ user: userSchema });
 
+export const PASSWORD_REQUIREMENTS_MESSAGE =
+  "Use at least 8 characters, including an uppercase letter, lowercase letter, number, and special character.";
+
+export const passwordSchema = z
+  .string()
+  .min(8, PASSWORD_REQUIREMENTS_MESSAGE)
+  .regex(/[a-z]/, PASSWORD_REQUIREMENTS_MESSAGE)
+  .regex(/[A-Z]/, PASSWORD_REQUIREMENTS_MESSAGE)
+  .regex(/\d/, PASSWORD_REQUIREMENTS_MESSAGE)
+  .regex(/[^A-Za-z0-9]/, PASSWORD_REQUIREMENTS_MESSAGE);
+
 export const deviceInformationSchema = z.object({
   devicePlatform: z.literal("web"),
   browserName: z.string().min(1),
@@ -35,7 +46,7 @@ export const loginRequestSchema = deviceInformationSchema.extend({
 export const registerRequestSchema = deviceInformationSchema.extend({
   name: z.string().min(1),
   email: z.email(),
-  password: z.string().min(8),
+  password: passwordSchema,
 });
 
 export type User = z.infer<typeof userSchema>;
@@ -43,3 +54,15 @@ export type AuthResponse = z.infer<typeof authResponseSchema>;
 export type DeviceInformation = z.infer<typeof deviceInformationSchema>;
 export type LoginRequest = z.infer<typeof loginRequestSchema>;
 export type RegisterRequest = z.infer<typeof registerRequestSchema>;
+
+export const forgotPasswordRequestSchema = z.object({
+  email: z.email(),
+});
+
+export const resetPasswordRequestSchema = z.object({
+  passwordResetToken: z.string().min(1),
+  password: passwordSchema,
+});
+
+export type ForgotPasswordRequest = z.infer<typeof forgotPasswordRequestSchema>;
+export type ResetPasswordRequest = z.infer<typeof resetPasswordRequestSchema>;

@@ -5,11 +5,11 @@ import axios, {
 import { z } from "zod";
 
 import { notifyTerminalAuthFailure } from "@/lib/api/auth-failure";
+import { authApiPaths } from "@/lib/api/api-paths";
 import type { ApiSuccessEnvelope } from "@/lib/api/api.types";
 import { normalizeApiError } from "@/lib/api/normalize-api-error";
 import { env } from "@/lib/env/env";
 
-const AUTH_REFRESH_PATH = "/api/v1/auth/refresh";
 const MUTATION_METHODS = new Set(["patch", "post", "put"]);
 const retriedRequests = new WeakSet<InternalAxiosRequestConfig>();
 
@@ -65,7 +65,7 @@ function wrapMutationPayload(config: InternalAxiosRequestConfig) {
 async function refreshSession() {
   if (!refreshPromise) {
     refreshPromise = refreshClient
-      .post(AUTH_REFRESH_PATH)
+      .post(authApiPaths.refresh)
       .then(() => {
         hasNotifiedTerminalAuthFailure = false;
       })
@@ -96,7 +96,7 @@ axiosClient.interceptors.response.use(undefined, async (error: unknown) => {
   if (
     !originalRequest ||
     originalRequest.worklog?.skipAuthRefresh ||
-    originalRequest.url === AUTH_REFRESH_PATH ||
+    originalRequest.url === authApiPaths.refresh ||
     retriedRequests.has(originalRequest)
   ) {
     throw error;

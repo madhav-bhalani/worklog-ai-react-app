@@ -47,7 +47,7 @@ describe("authentication forms", () => {
   it("shows a safe backend login failure next to the form", async () => {
     const user = userEvent.setup();
     mockServer.use(
-      http.post(`${env.VITE_API_BASE_URL}/api/v1/auth/login`, () =>
+      http.post(`${env.VITE_API_BASE_URL}/auth/login`, () =>
         HttpResponse.json(
           {
             error: true,

@@ -9,7 +9,7 @@ describe("apiRequest", () => {
     expect.assertions(2);
 
     mockServer.use(
-      http.get(`${env.VITE_API_BASE_URL}/api/v1/test`, ({ request }) => {
+      http.get(`${env.VITE_API_BASE_URL}/test`, ({ request }) => {
         expect(request.headers.get("x-api-key")).toBe(env.SERVER_API_KEY);
 
         return HttpResponse.json({
@@ -24,7 +24,7 @@ describe("apiRequest", () => {
     await expect(
       apiRequest<{ isReady: boolean }>({
         method: "GET",
-        url: "/api/v1/test",
+        url: "/test",
       }),
     ).resolves.toEqual({ isReady: true });
   });

@@ -6,6 +6,7 @@ import { LoginRoutePage } from "@/features/auth/components/login-route-page";
 const loginSearchSchema = z.object({
   email: z.email().optional(),
   registered: z.literal("1").optional(),
+  passwordReset: z.literal("1").optional(),
 });
 
 export const Route = createFileRoute("/login")({
