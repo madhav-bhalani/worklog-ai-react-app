@@ -22,6 +22,7 @@ import {
 import { getBrowserDeviceInformation } from "@/features/auth/utils/browser-device-info";
 
 interface LoginFormProps {
+  hasPasswordBeenReset?: boolean | undefined;
   registeredEmail?: string | undefined;
 }
 
@@ -31,7 +32,10 @@ function getErrorMessage(error: unknown) {
     : "We couldn't sign you in. Please try again.";
 }
 
-export function LoginForm({ registeredEmail }: LoginFormProps) {
+export function LoginForm({
+  hasPasswordBeenReset,
+  registeredEmail,
+}: LoginFormProps) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const loginMutation = useLoginMutation();
@@ -70,6 +74,14 @@ export function LoginForm({ registeredEmail }: LoginFormProps) {
           role="status"
         >
           Your account is ready. Sign in to continue.
+        </p>
+      ) : null}
+      {hasPasswordBeenReset ? (
+        <p
+          className="border-success/30 bg-success/10 text-foreground rounded-md border px-3 py-2.5 text-sm"
+          role="status"
+        >
+          Your password has been reset. Sign in with your new password.
         </p>
       ) : null}
       {formError ? (
@@ -114,6 +126,14 @@ export function LoginForm({ registeredEmail }: LoginFormProps) {
           {...form.register("password")}
         />
       </AuthFormField>
+      <div className="-mt-2 text-right">
+        <Link
+          className="text-primary text-sm font-medium hover:underline"
+          to="/forgot-password"
+        >
+          Forgot password?
+        </Link>
+      </div>
       <Button
         className="w-full"
         disabled={loginMutation.isPending}

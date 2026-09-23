@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { LoaderCircle } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import type { FormEvent } from "react";
 
 import { ApiError } from "@/lib/api/api-error";
@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { AuthFormField } from "@/features/auth/components/auth-form-field";
 import { GoogleAuthButton } from "@/features/auth/components/google-auth-button";
 import { PasswordInput } from "@/features/auth/components/password-input";
+import { PasswordRequirements } from "@/features/auth/components/password-requirements";
 import {
   registerFormSchema,
   type RegisterFormValues,
@@ -35,6 +36,7 @@ export function RegisterForm() {
     defaultValues: { name: "", email: "", password: "", confirmPassword: "" },
     resolver: zodResolver(registerFormSchema),
   });
+  const password = useWatch({ control: form.control, name: "password" });
 
   async function handleSubmit(values: RegisterFormValues) {
     try {
@@ -104,23 +106,16 @@ export function RegisterForm() {
           {...form.register("email")}
         />
       </AuthFormField>
-      <AuthFormField
-        error={form.formState.errors.password?.message}
-        htmlFor="register-password"
-        label="Password"
-      >
+      <AuthFormField htmlFor="register-password" label="Password">
         <PasswordInput
-          aria-describedby={
-            form.formState.errors.password
-              ? "register-password-error"
-              : undefined
-          }
+          aria-describedby="password-requirements"
           aria-invalid={Boolean(form.formState.errors.password)}
           autoComplete="new-password"
           id="register-password"
           placeholder="At least 8 characters"
           {...form.register("password")}
         />
+        <PasswordRequirements password={password} />
       </AuthFormField>
       <AuthFormField
         error={form.formState.errors.confirmPassword?.message}

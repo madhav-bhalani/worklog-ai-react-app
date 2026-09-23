@@ -15,10 +15,10 @@ const apiBaseUrlSchema = z
         });
       }
 
-      if (url.pathname !== "/" || url.search || url.hash) {
+      if (url.pathname !== "/api/v1" || url.search || url.hash) {
         context.addIssue({
           code: "custom",
-          message: "must be an origin without a path, query, or hash",
+          message: "must end with /api/v1 and not include a query or hash",
         });
       }
 

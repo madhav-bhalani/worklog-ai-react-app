@@ -3,8 +3,10 @@ import { queryOptions, useMutation, useQuery } from "@tanstack/react-query";
 import {
   login,
   logout,
+  requestPasswordReset,
   refreshSession,
   register,
+  resetPassword,
 } from "@/features/auth/api/auth.api";
 
 export const authKeys = {
@@ -30,6 +32,14 @@ export function useLoginMutation() {
 
 export function useRegisterMutation() {
   return useMutation({ mutationFn: register });
+}
+
+export function useRequestPasswordResetMutation() {
+  return useMutation({ mutationFn: requestPasswordReset, retry: false });
+}
+
+export function useResetPasswordMutation() {
+  return useMutation({ mutationFn: resetPassword, retry: false });
 }
 
 export function useLogoutMutation() {

@@ -3,7 +3,9 @@ import { http, HttpResponse } from "msw";
 import {
   login,
   logout,
+  requestPasswordReset,
   register,
+  resetPassword,
   getGoogleAuthenticationUrl,
 } from "@/features/auth/api/auth.api";
 import { env } from "@/lib/env/env";
@@ -31,27 +33,24 @@ describe("auth API", () => {
     expect.assertions(2);
 
     mockServer.use(
-      http.post(
-        `${env.VITE_API_BASE_URL}/api/v1/auth/login`,
-        async ({ request }) => {
-          expect(await request.json()).toEqual({
-            data: {
-              identifier: "user@example.com",
-              password: "password123",
-              devicePlatform: "web",
-              browserName: "Chrome",
-              browserVersion: "120.0",
-            },
-          });
+      http.post(`${env.VITE_API_BASE_URL}/auth/login`, async ({ request }) => {
+        expect(await request.json()).toEqual({
+          data: {
+            identifier: "user@example.com",
+            password: "password123",
+            devicePlatform: "web",
+            browserName: "Chrome",
+            browserVersion: "120.0",
+          },
+        });
 
-          return HttpResponse.json({
-            error: false,
-            statusCode: 200,
-            message: "User has been logged in successfully",
-            data: { user: USER },
-          });
-        },
-      ),
+        return HttpResponse.json({
+          error: false,
+          statusCode: 200,
+          message: "User has been logged in successfully",
+          data: { user: USER },
+        });
+      }),
     );
 
     await expect(
@@ -70,7 +69,7 @@ describe("auth API", () => {
 
     mockServer.use(
       http.post(
-        `${env.VITE_API_BASE_URL}/api/v1/auth/register`,
+        `${env.VITE_API_BASE_URL}/auth/register`,
         async ({ request }) => {
           expect(await request.json()).toEqual({
             data: {
@@ -109,27 +108,82 @@ describe("auth API", () => {
     expect.assertions(2);
 
     mockServer.use(
+      http.post(`${env.VITE_API_BASE_URL}/auth/logout`, ({ request }) => {
+        expect(request.headers.get("x-api-key")).toBe(env.SERVER_API_KEY);
+
+        return HttpResponse.json({
+          error: false,
+          statusCode: 200,
+          message: "User has been logged out successfully",
+          data: null,
+        });
+      }),
+    );
+
+    await expect(logout()).resolves.toBeNull();
+  });
+
+  it("wraps forgot-password requests through the shared client", async () => {
+    expect.assertions(2);
+
+    mockServer.use(
       http.post(
-        `${env.VITE_API_BASE_URL}/api/v1/auth/logout`,
-        ({ request }) => {
-          expect(request.headers.get("x-api-key")).toBe(env.SERVER_API_KEY);
+        `${env.VITE_API_BASE_URL}/auth/forgot-password`,
+        async ({ request }) => {
+          expect(await request.json()).toEqual({
+            data: { email: "user@example.com" },
+          });
 
           return HttpResponse.json({
             error: false,
             statusCode: 200,
-            message: "User has been logged out successfully",
+            message: "Password reset email sent",
             data: null,
           });
         },
       ),
     );
 
-    await expect(logout()).resolves.toBeNull();
+    await expect(
+      requestPasswordReset({ email: "user@example.com" }),
+    ).resolves.toBeNull();
+  });
+
+  it("sends the reset token only in the reset-password request body", async () => {
+    expect.assertions(2);
+
+    mockServer.use(
+      http.post(
+        `${env.VITE_API_BASE_URL}/auth/reset-password`,
+        async ({ request }) => {
+          expect(await request.json()).toEqual({
+            data: {
+              passwordResetToken: "reset-token",
+              password: "password123",
+            },
+          });
+
+          return HttpResponse.json({
+            error: false,
+            statusCode: 200,
+            message: "Password reset successfully",
+            data: null,
+          });
+        },
+      ),
+    );
+
+    await expect(
+      resetPassword({
+        passwordResetToken: "reset-token",
+        password: "password123",
+      }),
+    ).resolves.toBeNull();
   });
 
   it("builds the backend-owned Google authentication URL", () => {
     expect(getGoogleAuthenticationUrl()).toBe(
-      `${env.VITE_API_BASE_URL}/api/v1/auth/google`,
+      `${env.VITE_API_BASE_URL}/auth/google`,
     );
   });
 });
