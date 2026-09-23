@@ -1,6 +1,11 @@
 import { http, HttpResponse } from "msw";
 
-import { login, logout, register } from "@/features/auth/api/auth.api";
+import {
+  login,
+  logout,
+  register,
+  getGoogleAuthenticationUrl,
+} from "@/features/auth/api/auth.api";
 import { env } from "@/lib/env/env";
 import { mockServer } from "@/test/msw/server";
 
@@ -120,5 +125,11 @@ describe("auth API", () => {
     );
 
     await expect(logout()).resolves.toBeNull();
+  });
+
+  it("builds the backend-owned Google authentication URL", () => {
+    expect(getGoogleAuthenticationUrl()).toBe(
+      `${env.VITE_API_BASE_URL}/api/v1/auth/google`,
+    );
   });
 });

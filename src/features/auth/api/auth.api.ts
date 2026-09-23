@@ -1,4 +1,5 @@
 import { apiRequest } from "@/lib/api/api-client";
+import { env } from "@/lib/env/env";
 
 import {
   authResponseSchema,
@@ -54,6 +55,10 @@ export function refreshSession() {
       worklog: { skipAuthRefresh: true },
     }),
   );
+}
+
+export function getGoogleAuthenticationUrl() {
+  return new URL("/api/v1/auth/google", env.VITE_API_BASE_URL).toString();
 }
 
 export function logout() {
