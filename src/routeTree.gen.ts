@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as RegisterRouteImport } from './routes/register'
+import { Route as OauthResultRouteImport } from './routes/oauth/result'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -34,18 +35,25 @@ const RegisterRoute = RegisterRouteImport.update({
   path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OauthResultRoute = OauthResultRouteImport.update({
+  id: '/oauth/result',
+  path: '/oauth/result',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/oauth/result': typeof OauthResultRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/app': typeof AppRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/oauth/result': typeof OauthResultRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -53,13 +61,14 @@ export interface FileRoutesById {
   '/app': typeof AppRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/oauth/result': typeof OauthResultRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/app' | '/login' | '/register'
+  fullPaths: '/' | '/app' | '/login' | '/register' | '/oauth/result'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/app' | '/login' | '/register'
-  id: '__root__' | '/' | '/app' | '/login' | '/register'
+  to: '/' | '/app' | '/login' | '/register' | '/oauth/result'
+  id: '__root__' | '/' | '/app' | '/login' | '/register' | '/oauth/result'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -67,6 +76,7 @@ export interface RootRouteChildren {
   AppRoute: typeof AppRoute
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
+  OauthResultRoute: typeof OauthResultRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -99,6 +109,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/oauth/result': {
+      id: '/oauth/result'
+      path: '/oauth/result'
+      fullPath: '/oauth/result'
+      preLoaderRoute: typeof OauthResultRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -107,6 +124,7 @@ const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRoute,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
+  OauthResultRoute: OauthResultRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

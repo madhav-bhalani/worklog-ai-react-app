@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { getGoogleAuthenticationUrl } from "@/features/auth/api/auth.api";
 
 function GoogleMark() {
   return (
@@ -24,12 +25,14 @@ function GoogleMark() {
 }
 
 export function GoogleAuthButton() {
+  function handleGoogleAuthentication() {
+    window.location.assign(getGoogleAuthenticationUrl());
+  }
+
   return (
     <Button
       className="w-full"
-      onClick={() => {
-        // TODO: Wire the backend-owned Google OAuth initiation flow in its dedicated feature.
-      }}
+      onClick={handleGoogleAuthentication}
       type="button"
       variant="outline"
     >
